@@ -1,4 +1,29 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+// ============================================
+// RESPONSIVE HOOK
+// ============================================
+
+function useWindowSize() {
+  const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  
+  useEffect(() => {
+    const handleResize = () => setSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return {
+    ...size,
+    isMobile: size.width < 640,
+    isTablet: size.width >= 640 && size.width < 1024,
+    isDesktop: size.width >= 1024,
+  };
+}
+
+// ============================================
+// DATA
+// ============================================
 
 const COLORS = {
   verb: { bg: "#d4e4ed", text: "#2d5a7b" },
@@ -149,23 +174,83 @@ function PlayButtonWhite({ src, label }) {
 }
 
 // ============================================
-// SHARED
+// SHARED NAVIGATION
 // ============================================
 
 function Nav({ onNext, onBack, nextLabel = "Continue" }) {
+  const { isMobile } = useWindowSize();
+  
   return (
-    <div style={{ position: 'fixed', bottom: 32, left: 32, right: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 50 }}>
-      <div>{onBack && <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8888a0', fontSize: 14, letterSpacing: '0.05em' }}>← Back</button>}</div>
-      <div>{onNext && <button onClick={onNext} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1a1a2e', fontSize: 14, letterSpacing: '0.05em' }}>{nextLabel} →</button>}</div>
+    <div style={{ 
+      position: 'fixed', 
+      bottom: isMobile ? 16 : 32, 
+      left: isMobile ? 16 : 32, 
+      right: isMobile ? 16 : 32, 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      zIndex: 50,
+      padding: isMobile ? '12px 16px' : 0,
+      backgroundColor: isMobile ? 'rgba(232, 235, 244, 0.95)' : 'transparent',
+      borderRadius: isMobile ? 12 : 0,
+      backdropFilter: isMobile ? 'blur(10px)' : 'none',
+    }}>
+      <div>
+        {onBack && (
+          <button onClick={onBack} style={{ 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            color: '#8888a0', 
+            fontSize: isMobile ? 15 : 14, 
+            letterSpacing: '0.05em',
+            padding: isMobile ? '8px 0' : 0,
+          }}>
+            ← Back
+          </button>
+        )}
+      </div>
+      <div>
+        {onNext && (
+          <button onClick={onNext} style={{ 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            color: '#1a1a2e', 
+            fontSize: isMobile ? 15 : 14, 
+            letterSpacing: '0.05em',
+            padding: isMobile ? '8px 0' : 0,
+            fontWeight: isMobile ? 600 : 400,
+          }}>
+            {nextLabel} →
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
 function Dots({ current, total }) {
+  const { isMobile } = useWindowSize();
+  
   return (
-    <div style={{ position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 8, zIndex: 50 }}>
+    <div style={{ 
+      position: 'fixed', 
+      bottom: isMobile ? 70 : 32, 
+      left: '50%', 
+      transform: 'translateX(-50%)', 
+      display: 'flex', 
+      gap: isMobile ? 6 : 8, 
+      zIndex: 50 
+    }}>
       {Array.from({ length: total }).map((_, i) => (
-        <div key={i} style={{ height: 6, borderRadius: 3, transition: 'all 0.4s ease', width: i === current ? 32 : 6, backgroundColor: i === current ? '#1a1a2e' : 'rgba(26,26,46,0.15)' }} />
+        <div key={i} style={{ 
+          height: isMobile ? 4 : 6, 
+          borderRadius: 3, 
+          transition: 'all 0.4s ease', 
+          width: i === current ? (isMobile ? 24 : 32) : (isMobile ? 4 : 6), 
+          backgroundColor: i === current ? '#1a1a2e' : 'rgba(26,26,46,0.15)' 
+        }} />
       ))}
     </div>
   );
@@ -176,15 +261,67 @@ function Dots({ current, total }) {
 // ============================================
 
 function TitleSlide({ onNext }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const fontSize = isMobile ? 36 : isTablet ? 44 : 56;
+  const imageHeight = isMobile ? 220 : isTablet ? 280 : 360;
+  const padding = isMobile ? 20 : 32;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#E8EBF4', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      padding 
+    }}>
       <div style={{ maxWidth: 800, width: '100%' }}>
-        <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.2em', marginBottom: 24 }}>SWEDISH THROUGH METAL</p>
-        <img src="/images/cathedral.jpg" alt="Stockholm Cathedral, 1697" style={{ width: '100%', height: 360, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
-        <div style={{ marginTop: 48, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <p style={{ 
+          color: '#8888a0', 
+          fontSize: isMobile ? 10 : 11, 
+          letterSpacing: '0.2em', 
+          marginBottom: isMobile ? 16 : 24 
+        }}>
+          SWEDISH THROUGH METAL
+        </p>
+        <img 
+          src="/images/cathedral.jpg" 
+          alt="Stockholm Cathedral, 1697" 
+          style={{ 
+            width: '100%', 
+            height: imageHeight, 
+            objectFit: 'cover', 
+            objectPosition: 'center 20%', 
+            borderRadius: 4 
+          }} 
+        />
+        <div style={{ 
+          marginTop: isMobile ? 24 : 48, 
+          display: 'flex', 
+          flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'space-between', 
+          alignItems: isMobile ? 'flex-start' : 'flex-end',
+          gap: isMobile ? 8 : 0,
+        }}>
           <div>
-            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 56, color: '#1a1a2e', margin: 0, lineHeight: 1.1 }}>Carolus Rex</h1>
-            <p style={{ color: '#8888a0', fontSize: 14, fontStyle: 'italic', marginTop: 8 }}>The Last Viking</p>
+            <h1 style={{ 
+              fontFamily: 'Georgia, serif', 
+              fontSize, 
+              color: '#1a1a2e', 
+              margin: 0, 
+              lineHeight: 1.1 
+            }}>
+              Carolus Rex
+            </h1>
+            <p style={{ 
+              color: '#8888a0', 
+              fontSize: isMobile ? 13 : 14, 
+              fontStyle: 'italic', 
+              marginTop: 8 
+            }}>
+              The Last Viking
+            </p>
           </div>
         </div>
       </div>
@@ -194,22 +331,57 @@ function TitleSlide({ onNext }) {
 }
 
 // ============================================
-// STORY
+// STORY SLIDES
 // ============================================
 
 function StorySlide1({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const headingSize = isMobile ? 32 : isTablet ? 40 : 48;
+  const bodySize = isMobile ? 16 : 18;
+  const padding = isMobile ? '24px 20px' : isTablet ? '32px 40px' : '32px 64px';
+  const imageHeight = isMobile ? 280 : isTablet ? 400 : 520;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding: '32px 64px' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '80vh' }}>
-        <div>
-          <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 24 }}>I. THE BOY</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 48, color: '#1a1a2e', marginBottom: 32, lineHeight: 1.1 }}>1697</h2>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.7, marginBottom: 24 }}>In 1697, the Swedish Empire was vast. Finland, Estonia, Latvia, parts of Germany. The Baltic Sea was essentially a Swedish lake.</p>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.7, marginBottom: 8 }}>Then the king died. The crown passed to his son, Karl XII.</p>
-          <p style={{ color: '#1a1a2e', fontSize: 22, lineHeight: 1.7, marginBottom: 24, fontWeight: 700 }}>He was fifteen.</p>
-          <p style={{ color: '#5c5c7a', lineHeight: 1.7 }}>They would come to call him "The Last Viking." "The Swedish Meteor."</p>
+    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
+      <div style={{ 
+        maxWidth: 1100, 
+        margin: '0 auto', 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+        gap: isMobile ? 32 : isTablet ? 40 : 64, 
+        alignItems: 'center', 
+        minHeight: isMobile ? 'auto' : '80vh',
+        paddingBottom: isMobile ? 100 : 0,
+      }}>
+        <div style={{ order: isMobile ? 2 : 1 }}>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>I. THE BOY</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 20 : 32, lineHeight: 1.1 }}>1697</h2>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.7, marginBottom: isMobile ? 16 : 24 }}>
+            In 1697, the Swedish Empire was vast. Finland, Estonia, Latvia, parts of Germany. The Baltic Sea was essentially a Swedish lake.
+          </p>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.7, marginBottom: 8 }}>
+            Then the king died. The crown passed to his son, Karl XII.
+          </p>
+          <p style={{ color: '#1a1a2e', fontSize: isMobile ? 18 : 22, lineHeight: 1.7, marginBottom: isMobile ? 16 : 24, fontWeight: 700 }}>
+            He was fifteen.
+          </p>
+          <p style={{ color: '#5c5c7a', lineHeight: 1.7, fontSize: isMobile ? 15 : 16 }}>
+            They would come to call him "The Last Viking." "The Swedish Meteor."
+          </p>
         </div>
-        <img src="/images/karl-xii.jpg" alt="Karl XII" style={{ width: '100%', height: 520, objectFit: 'cover', objectPosition: 'center 70%', borderRadius: 4 }} />
+        <img 
+          src="/images/karl-xii.jpg" 
+          alt="Karl XII" 
+          style={{ 
+            width: '100%', 
+            height: imageHeight, 
+            objectFit: 'cover', 
+            objectPosition: 'center 70%', 
+            borderRadius: 4,
+            order: isMobile ? 1 : 2,
+          }} 
+        />
       </div>
       <Dots current={1} total={10} />
       <Nav onNext={onNext} onBack={onBack} />
@@ -218,18 +390,56 @@ function StorySlide1({ onNext, onBack }) {
 }
 
 function StorySlide2({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const headingSize = isMobile ? 28 : isTablet ? 36 : 44;
+  const bodySize = isMobile ? 16 : 18;
+  const padding = isMobile ? '24px 20px' : isTablet ? '32px 40px' : '32px 64px';
+  const imageHeight = isMobile ? 250 : isTablet ? 340 : 420;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding: '32px 64px' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '80vh' }}>
-        <img src="/images/coronation.jpg" alt="The coronation" style={{ width: '100%', height: 420, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
+    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding }}>
+      <div style={{ 
+        maxWidth: 1100, 
+        margin: '0 auto', 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+        gap: isMobile ? 32 : isTablet ? 40 : 64, 
+        alignItems: 'center', 
+        minHeight: isMobile ? 'auto' : '80vh',
+        paddingBottom: isMobile ? 100 : 0,
+      }}>
+        <img 
+          src="/images/coronation.jpg" 
+          alt="The coronation" 
+          style={{ 
+            width: '100%', 
+            height: imageHeight, 
+            objectFit: 'cover', 
+            objectPosition: 'center 20%', 
+            borderRadius: 4 
+          }} 
+        />
         <div>
-          <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 24 }}>II. THE CROWN</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 44, color: '#7c6a9c', marginBottom: 8, lineHeight: 1.1, fontStyle: 'italic' }}>Kronan kommer ej från kyrkan</h2>
-          <p style={{ color: '#8888a0', fontSize: 16, fontStyle: 'italic', marginBottom: 32 }}>The crown comes not from the church</p>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.7, marginBottom: 24 }}>As the coronation reached its peak, Karl stepped toward the archbishop and instead of kneeling to receive the crown, he took it and placed it on his own head.</p>
-          <p style={{ color: '#5c5c7a', lineHeight: 1.7, marginBottom: 24 }}>He then refused to swear an oath to the church, declaring that his crown came not from the church, but directly from God.</p>
-          <p style={{ color: '#5c5c7a', lineHeight: 1.7, marginBottom: 24 }}>As a king, he was unique. He preferred to dress like a common soldier, eat with his men and sleep in the same tents. Never marrying.</p>
-          <p style={{ color: '#5c5c7a', lineHeight: 1.7 }}>He said he was "married to his troops, in life and in death."</p>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>II. THE CROWN</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#7c6a9c', marginBottom: 8, lineHeight: 1.1, fontStyle: 'italic' }}>
+            Kronan kommer ej från kyrkan
+          </h2>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 14 : 16, fontStyle: 'italic', marginBottom: isMobile ? 20 : 32 }}>
+            The crown comes not from the church
+          </p>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.7, marginBottom: isMobile ? 16 : 24 }}>
+            As the coronation reached its peak, Karl stepped toward the archbishop and instead of kneeling to receive the crown, he took it and placed it on his own head.
+          </p>
+          <p style={{ color: '#5c5c7a', lineHeight: 1.7, marginBottom: isMobile ? 16 : 24, fontSize: isMobile ? 15 : 16 }}>
+            He then refused to swear an oath to the church, declaring that his crown came not from the church, but directly from God.
+          </p>
+          <p style={{ color: '#5c5c7a', lineHeight: 1.7, marginBottom: isMobile ? 16 : 24, fontSize: isMobile ? 15 : 16 }}>
+            As a king, he was unique. He preferred to dress like a common soldier, eat with his men and sleep in the same tents. Never marrying.
+          </p>
+          <p style={{ color: '#5c5c7a', lineHeight: 1.7, fontSize: isMobile ? 15 : 16 }}>
+            He said he was "married to his troops, in life and in death."
+          </p>
         </div>
       </div>
       <Dots current={2} total={10} />
@@ -239,30 +449,64 @@ function StorySlide2({ onNext, onBack }) {
 }
 
 function StorySlide3({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const headingSize = isMobile ? 32 : isTablet ? 40 : 48;
+  const bodySize = isMobile ? 16 : 18;
+  const padding = isMobile ? '24px 20px' : isTablet ? '32px 40px' : '32px 64px';
+  const imageHeight = isMobile ? 220 : isTablet ? 320 : 400;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding: '32px 64px' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '80vh' }}>
-        <div>
-          <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 24 }}>III. THE LAST VIKING</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 48, color: '#1a1a2e', marginBottom: 32, lineHeight: 1.1 }}>Young, but fierce</h2>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.8, marginBottom: 16 }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
+      <div style={{ 
+        maxWidth: 1100, 
+        margin: '0 auto', 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+        gap: isMobile ? 32 : isTablet ? 40 : 64, 
+        alignItems: 'center', 
+        minHeight: isMobile ? 'auto' : '80vh',
+        paddingBottom: isMobile ? 100 : 0,
+      }}>
+        <div style={{ order: isMobile ? 2 : 1 }}>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>III. THE LAST VIKING</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 20 : 32, lineHeight: 1.1 }}>
+            Young, but fierce
+          </h2>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.8, marginBottom: 16 }}>
             The day he was crowned, three countries attacked Sweden at once. Denmark. Poland. Russia. They thought a child would be an easy target.
           </p>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.8, marginBottom: 16 }}>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.8, marginBottom: 16 }}>
             At 18, he defeated a Russian army four times his size - in a blizzard. He left Stockholm with his army and spent the next eighteen years fighting across Europe. Refusing to surrender. Refusing to negotiate.
           </p>
-          <p style={{ color: '#5c5c7a', fontSize: 18, lineHeight: 1.8, marginBottom: 8 }}>
+          <p style={{ color: '#5c5c7a', fontSize: bodySize, lineHeight: 1.8, marginBottom: 8 }}>
             In 1718, during a siege in Norway, he was struck by a bullet to the head.
           </p>
-          <p style={{ color: '#1a1a2e', fontSize: 20, fontWeight: 700 }}>And so ended the reign of the Last Viking.</p>
+          <p style={{ color: '#1a1a2e', fontSize: isMobile ? 17 : 20, fontWeight: 700 }}>
+            And so ended the reign of the Last Viking.
+          </p>
         </div>
-        <div>
-          <img src="/images/cederstrom.jpg" alt="Bringing Home the Body of King Karl XII" style={{ width: '100%', height: 400, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
-          <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 24 }}>
+        <div style={{ order: isMobile ? 1 : 2 }}>
+          <img 
+            src="/images/cederstrom.jpg" 
+            alt="Bringing Home the Body of King Karl XII" 
+            style={{ 
+              width: '100%', 
+              height: imageHeight, 
+              objectFit: 'cover', 
+              objectPosition: 'center 20%', 
+              borderRadius: 4 
+            }} 
+          />
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-around', 
+            marginTop: isMobile ? 16 : 24 
+          }}>
             {[{ n: "15", l: "crowned" }, { n: "18", l: "years at war" }, { n: "36", l: "died" }].map((d, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Georgia, serif', fontSize: 36, color: '#1a1a2e', margin: 0 }}>{d.n}</p>
-                <p style={{ color: '#8888a0', fontSize: 12 }}>{d.l}</p>
+                <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 28 : 36, color: '#1a1a2e', margin: 0 }}>{d.n}</p>
+                <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12 }}>{d.l}</p>
               </div>
             ))}
           </div>
@@ -278,20 +522,20 @@ function StorySlide3({ onNext, onBack }) {
 // VOCAB
 // ============================================
 
-function VocabColumn({ words, label }) {
+function VocabColumn({ words, label, isMobile }) {
   return (
     <div>
-      <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.1em', marginBottom: 16 }}>{label}</p>
+      <p style={{ color: '#8888a0', fontSize: isMobile ? 10 : 11, letterSpacing: '0.1em', marginBottom: isMobile ? 12 : 16 }}>{label}</p>
       {words.map((word, i) => {
         const c = COLORS[word.type];
         return (
-          <div key={i} style={{ padding: '14px 0', borderBottom: '1px solid #f0f0f0' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 2 }}>
-              <span style={{ fontFamily: 'Georgia, serif', fontSize: 26, color: c.text }}>{word.swedish}</span>
-              <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, backgroundColor: c.bg, color: c.text }}>{word.type}</span>
+          <div key={i} style={{ padding: isMobile ? '12px 0' : '14px 0', borderBottom: '1px solid #f0f0f0' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: isMobile ? 8 : 10, marginBottom: 2, flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 22 : 26, color: c.text }}>{word.swedish}</span>
+              <span style={{ fontSize: isMobile ? 10 : 11, padding: '2px 8px', borderRadius: 10, backgroundColor: c.bg, color: c.text }}>{word.type}</span>
             </div>
-            <span style={{ color: '#5c5c7a', fontSize: 15 }}>{word.phonetic}</span>
-            <p style={{ color: '#5c5c7a', fontSize: 16, margin: '4px 0 0' }}>{word.meaning}</p>
+            <span style={{ color: '#5c5c7a', fontSize: isMobile ? 13 : 15 }}>{word.phonetic}</span>
+            <p style={{ color: '#5c5c7a', fontSize: isMobile ? 14 : 16, margin: '4px 0 0' }}>{word.meaning}</p>
           </div>
         );
       })}
@@ -300,14 +544,25 @@ function VocabColumn({ words, label }) {
 }
 
 function VocabPage({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '32px 20px 120px' : isTablet ? '40px 40px 100px' : '48px 64px 100px';
+  const headingSize = isMobile ? 32 : isTablet ? 38 : 44;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding: '48px 64px 100px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding }}>
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
-        <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 8 }}>THE STORY'S LANGUAGE</p>
-        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 44, color: '#1a1a2e', marginBottom: 40 }}>Words to listen for</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
-          <VocabColumn words={VOCAB_P1} label="PART 1 - THE VERSE" />
-          <VocabColumn words={VOCAB_P2} label="PART 2 - THE CHORUS" />
+        <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: 8 }}>THE STORY'S LANGUAGE</p>
+        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 28 : 40 }}>
+          Words to listen for
+        </h2>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+          gap: isMobile ? 32 : 48 
+        }}>
+          <VocabColumn words={VOCAB_P1} label="PART 1 - THE VERSE" isMobile={isMobile} />
+          <VocabColumn words={VOCAB_P2} label="PART 2 - THE CHORUS" isMobile={isMobile} />
         </div>
       </div>
       <Dots current={4} total={10} />
@@ -317,57 +572,19 @@ function VocabPage({ onNext, onBack }) {
 }
 
 // ============================================
-// FIRST LISTEN
-// ============================================
-
-function FirstListen({ onNext, onBack }) {
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding: '48px 64px 100px' }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 8 }}>FIRST LISTEN</p>
-        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 48, color: '#1a1a2e', marginBottom: 8, lineHeight: 1.1 }}>Hear the words</h2>
-        <p style={{ color: '#5c5c7a', fontSize: 18, marginBottom: 48 }}>
-          Just try to hear the words. Don't worry about anything else yet.
-        </p>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-          <div style={{ backgroundColor: '#ffffff', borderRadius: 8, padding: 32 }}>
-            <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.1em', marginBottom: 20 }}>PART 1 - THE VERSE</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
-              {VOCAB_P1.map((word, i) => {
-                const c = COLORS[word.type];
-                return <span key={i} style={{ backgroundColor: c.bg, color: c.text, padding: '6px 14px', borderRadius: 16, fontSize: 14, fontFamily: 'Georgia, serif' }}>{word.swedish}</span>;
-              })}
-            </div>
-            <PlayButton src="/audio/verse.mp3" label="Verse" />
-          </div>
-
-          <div style={{ backgroundColor: '#ffffff', borderRadius: 8, padding: 32 }}>
-            <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.1em', marginBottom: 20 }}>PART 2 - THE CHORUS</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
-              {VOCAB_P2.map((word, i) => {
-                const c = COLORS[word.type];
-                return <span key={i} style={{ backgroundColor: c.bg, color: c.text, padding: '6px 14px', borderRadius: 16, fontSize: 14, fontFamily: 'Georgia, serif' }}>{word.swedish}</span>;
-              })}
-            </div>
-            <PlayButton src="/audio/chorus.mp3" label="Chorus" />
-          </div>
-        </div>
-      </div>
-      <Dots current={5} total={10} />
-      <Nav onNext={onNext} onBack={onBack} />
-    </div>
-  );
-}
-
-// ============================================
 // LYRICS RENDERER
 // ============================================
 
-function renderLyricLines(lines) {
+function renderLyricLines(lines, isMobile) {
   return lines.map((line, i) => (
     <div key={i}>
-      <p style={{ fontFamily: 'Georgia, serif', fontSize: 24, color: '#1a1a2e', margin: '0 0 4px', lineHeight: 1.4 }}>
+      <p style={{ 
+        fontFamily: 'Georgia, serif', 
+        fontSize: isMobile ? 18 : 24, 
+        color: '#1a1a2e', 
+        margin: '0 0 4px', 
+        lineHeight: 1.4 
+      }}>
         {line.swedish.split(' ').map((token, j) => {
           const clean = token.toLowerCase().replace(/[,.:!?]/g, '');
           const matched = ALL_VOCAB.find(v => clean === v.swedish.toLowerCase());
@@ -379,7 +596,7 @@ function renderLyricLines(lines) {
           return <span key={j}>{token} </span>;
         })}
       </p>
-      <p style={{ fontSize: 14, margin: 0 }}>
+      <p style={{ fontSize: isMobile ? 13 : 14, margin: 0 }}>
         {line.english.split(' ').map((token, j) => {
           const clean = token.toLowerCase().replace(/[,.:!?']/g, '');
           const hlIndex = line.englishHL.findIndex(w => clean === w.toLowerCase());
@@ -396,20 +613,20 @@ function renderLyricLines(lines) {
   ));
 }
 
-function VocabKey({ words }) {
+function VocabKey({ words, isMobile }) {
   return (
-    <div style={{ backgroundColor: '#fff', padding: 24, borderRadius: 8 }}>
-      <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.1em', marginBottom: 12 }}>VOCABULARY KEY</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div style={{ backgroundColor: '#fff', padding: isMobile ? 16 : 24, borderRadius: 8 }}>
+      <p style={{ color: '#8888a0', fontSize: isMobile ? 10 : 11, letterSpacing: '0.1em', marginBottom: isMobile ? 10 : 12 }}>VOCABULARY KEY</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 6 : 8 }}>
         {words.map((word, i) => {
           const c = COLORS[word.type];
           return (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
               <div>
-                <span style={{ fontFamily: 'Georgia, serif', fontSize: 16, color: c.text }}>{word.swedish}</span>
-                <span style={{ color: '#5c5c7a', fontSize: 13, marginLeft: 6 }}>({word.phonetic})</span>
+                <span style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 14 : 16, color: c.text }}>{word.swedish}</span>
+                <span style={{ color: '#5c5c7a', fontSize: isMobile ? 12 : 13, marginLeft: 6 }}>({word.phonetic})</span>
               </div>
-              <span style={{ color: '#8888a0', fontSize: 13 }}>{word.meaning}</span>
+              <span style={{ color: '#8888a0', fontSize: isMobile ? 12 : 13 }}>{word.meaning}</span>
             </div>
           );
         })}
@@ -423,24 +640,56 @@ function VocabKey({ words }) {
 // ============================================
 
 function LyricsPage1({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
+  const headingSize = isMobile ? 28 : isTablet ? 34 : 40;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding: '32px 64px 100px' }}>
-      <div style={{ maxWidth: 900, margin: '0 auto', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 48 }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding }}>
+      <div style={{ 
+        maxWidth: 900, 
+        margin: '0 auto', 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '3fr 2fr', 
+        gap: isMobile ? 24 : 48 
+      }}>
+        {/* Audio player at top on mobile */}
+        {isMobile && (
+          <div>
+            <div style={{ backgroundColor: '#1a1a2e', padding: 24, borderRadius: 8, textAlign: 'center', marginBottom: 16 }}>
+              <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.15em', marginBottom: 12 }}>LISTEN TO PART 1</p>
+              <PlayButtonWhite src="/audio/verse.mp3" label="Verse" />
+            </div>
+          </div>
+        )}
+        
         <div>
-          <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 8 }}>PART 1 - THE VERSE</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, color: '#1a1a2e', marginBottom: 8 }}>Line by line</h2>
-          <p style={{ color: '#5c5c7a', marginBottom: 36 }}>Key words <span style={{ fontWeight: 600, color: '#2d5a7b' }}>highlighted</span> to follow along.</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-            {renderLyricLines(LYRICS_P1)}
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: 8 }}>PART 1 - THE VERSE</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: 8 }}>Line by line</h2>
+          <p style={{ color: '#5c5c7a', marginBottom: isMobile ? 24 : 36, fontSize: isMobile ? 14 : 16 }}>
+            Key words <span style={{ fontWeight: 600, color: '#2d5a7b' }}>highlighted</span> to follow along.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 20 : 28 }}>
+            {renderLyricLines(LYRICS_P1, isMobile)}
           </div>
         </div>
-        <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
-          <div style={{ backgroundColor: '#1a1a2e', padding: 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
-            <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 1</p>
-            <PlayButtonWhite src="/audio/verse.mp3" label="Verse" />
+        
+        {/* Sidebar on desktop/tablet */}
+        {!isMobile && (
+          <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
+            <div style={{ backgroundColor: '#1a1a2e', padding: isTablet ? 24 : 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
+              <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 1</p>
+              <PlayButtonWhite src="/audio/verse.mp3" label="Verse" />
+            </div>
+            <VocabKey words={VOCAB_P1} isMobile={isMobile} />
           </div>
-          <VocabKey words={VOCAB_P1} />
-        </div>
+        )}
+        
+        {/* Vocab key at bottom on mobile */}
+        {isMobile && (
+          <VocabKey words={VOCAB_P1} isMobile={isMobile} />
+        )}
       </div>
       <Dots current={5} total={10} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Part 2" />
@@ -453,24 +702,56 @@ function LyricsPage1({ onNext, onBack }) {
 // ============================================
 
 function LyricsPage2({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
+  const headingSize = isMobile ? 28 : isTablet ? 34 : 40;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding: '32px 64px 100px' }}>
-      <div style={{ maxWidth: 900, margin: '0 auto', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 48 }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding }}>
+      <div style={{ 
+        maxWidth: 900, 
+        margin: '0 auto', 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '3fr 2fr', 
+        gap: isMobile ? 24 : 48 
+      }}>
+        {/* Audio player at top on mobile */}
+        {isMobile && (
+          <div>
+            <div style={{ backgroundColor: '#1a1a2e', padding: 24, borderRadius: 8, textAlign: 'center', marginBottom: 16 }}>
+              <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.15em', marginBottom: 12 }}>LISTEN TO PART 2</p>
+              <PlayButtonWhite src="/audio/chorus.mp3" label="Chorus" />
+            </div>
+          </div>
+        )}
+        
         <div>
-          <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 8 }}>PART 2 - THE CHORUS</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, color: '#1a1a2e', marginBottom: 8 }}>Line by line</h2>
-          <p style={{ color: '#5c5c7a', marginBottom: 28 }}>Key words <span style={{ fontWeight: 600, color: '#2d5a7b' }}>highlighted</span> to follow along.</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {renderLyricLines(LYRICS_P2)}
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: 8 }}>PART 2 - THE CHORUS</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: 8 }}>Line by line</h2>
+          <p style={{ color: '#5c5c7a', marginBottom: isMobile ? 20 : 28, fontSize: isMobile ? 14 : 16 }}>
+            Key words <span style={{ fontWeight: 600, color: '#2d5a7b' }}>highlighted</span> to follow along.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 14 }}>
+            {renderLyricLines(LYRICS_P2, isMobile)}
           </div>
         </div>
-        <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
-          <div style={{ backgroundColor: '#1a1a2e', padding: 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
-            <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 2</p>
-            <PlayButtonWhite src="/audio/chorus.mp3" label="Chorus" />
+        
+        {/* Sidebar on desktop/tablet */}
+        {!isMobile && (
+          <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
+            <div style={{ backgroundColor: '#1a1a2e', padding: isTablet ? 24 : 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
+              <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 2</p>
+              <PlayButtonWhite src="/audio/chorus.mp3" label="Chorus" />
+            </div>
+            <VocabKey words={VOCAB_P2} isMobile={isMobile} />
           </div>
-          <VocabKey words={VOCAB_P2} />
-        </div>
+        )}
+        
+        {/* Vocab key at bottom on mobile */}
+        {isMobile && (
+          <VocabKey words={VOCAB_P2} isMobile={isMobile} />
+        )}
       </div>
       <Dots current={6} total={10} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Quick check" />
@@ -483,32 +764,48 @@ function LyricsPage2({ onNext, onBack }) {
 // ============================================
 
 function QuizPage({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
+  const headingSize = isMobile ? 28 : isTablet ? 34 : 40;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding: '32px 64px 100px', overflowY: 'auto' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding, overflowY: 'auto' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-        <div style={{ textAlign: 'center', marginBottom: 36, paddingBottom: 24, borderBottom: '2px solid #1a1a2e' }}>
-          <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, color: '#1a1a2e', marginBottom: 12 }}>Quick check</h2>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 24 : 36, paddingBottom: isMobile ? 16 : 24, borderBottom: '2px solid #1a1a2e' }}>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 10 : 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 8 : 12 }}>Quick check</h2>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 12 : 14, margin: 0 }}>Name: ..........................</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+          gap: isMobile ? 32 : 48 
+        }}>
+          {/* Part 1 - Multiple Choice */}
           <div>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: '#1a1a2e', marginBottom: 4 }}>Part 1</p>
-            <p style={{ color: '#8888a0', fontSize: 13, marginBottom: 24 }}>Fill in the circle next to the correct answer.</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 16 : 18, color: '#1a1a2e', marginBottom: 4 }}>Part 1</p>
+            <p style={{ color: '#8888a0', fontSize: isMobile ? 12 : 13, marginBottom: isMobile ? 16 : 24 }}>Fill in the circle next to the correct answer.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 16 : 12 }}>
               {MC_QUESTIONS.map((q, qi) => {
                 const word = ALL_VOCAB.find(v => v.swedish === q.word);
                 const c = word ? COLORS[word.type] : COLORS.other;
                 return (
-                  <div key={qi} style={{ paddingBottom: 8, borderBottom: '1px solid #f0f0f0' }}>
+                  <div key={qi} style={{ paddingBottom: isMobile ? 12 : 8, borderBottom: '1px solid #f0f0f0' }}>
                     <p style={{ margin: '0 0 4px' }}>
-                      <span style={{ fontFamily: 'Georgia, serif', fontSize: 20, color: c.text, fontWeight: 600 }}>{qi + 1}. {q.word}</span>
+                      <span style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 18 : 20, color: c.text, fontWeight: 600 }}>{qi + 1}. {q.word}</span>
                     </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 24px', paddingLeft: 20 }}>
+                    <div style={{ 
+                      display: 'grid', 
+                      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+                      gap: isMobile ? '8px 0' : '4px 24px', 
+                      paddingLeft: isMobile ? 12 : 20 
+                    }}>
                       {q.options.map((opt, oi) => (
-                        <p key={oi} style={{ margin: 0, color: '#5c5c7a', fontSize: 15, padding: '4px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <span style={{ display: 'inline-block', width: 18, height: 18, borderRadius: 9, border: '2px solid #c0c0c0', flexShrink: 0 }} />
+                        <p key={oi} style={{ margin: 0, color: '#5c5c7a', fontSize: isMobile ? 14 : 15, padding: '4px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <span style={{ display: 'inline-block', width: isMobile ? 20 : 18, height: isMobile ? 20 : 18, borderRadius: 10, border: '2px solid #c0c0c0', flexShrink: 0 }} />
                           {opt}
                         </p>
                       ))}
@@ -519,27 +816,36 @@ function QuizPage({ onNext, onBack }) {
             </div>
           </div>
 
+          {/* Part 2 - True/False */}
           <div>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: '#1a1a2e', marginBottom: 4 }}>Part 2</p>
-            <p style={{ color: '#8888a0', fontSize: 13, marginBottom: 24 }}>Fill in T for true or F for false.</p>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 16 : 18, color: '#1a1a2e', marginBottom: 4 }}>Part 2</p>
+            <p style={{ color: '#8888a0', fontSize: isMobile ? 12 : 13, marginBottom: isMobile ? 16 : 24 }}>Fill in T for true or F for false.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {TF_QUESTIONS.map((q, qi) => {
                 const word = ALL_VOCAB.find(v => v.swedish === q.word);
                 const c = word ? COLORS[word.type] : COLORS.other;
                 return (
-                  <div key={qi} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #f0f0f0' }}>
-                    <p style={{ margin: 0, fontSize: 15 }}>
+                  <div key={qi} style={{ 
+                    display: 'flex', 
+                    alignItems: isMobile ? 'flex-start' : 'center', 
+                    justifyContent: 'space-between', 
+                    padding: isMobile ? '12px 0' : '14px 0', 
+                    borderBottom: '1px solid #f0f0f0',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: isMobile ? 8 : 0,
+                  }}>
+                    <p style={{ margin: 0, fontSize: isMobile ? 14 : 15 }}>
                       <span style={{ color: '#8888a0', marginRight: 8 }}>{MC_QUESTIONS.length + qi + 1}.</span>
                       <span style={{ fontFamily: 'Georgia, serif', color: c.text, fontWeight: 600 }}>{q.word}</span>
                       <span style={{ color: '#5c5c7a' }}> means {q.statement.replace(`'${q.word}' means `, '')}</span>
                     </p>
-                    <div style={{ display: 'flex', gap: 12, flexShrink: 0, marginLeft: 16 }}>
+                    <div style={{ display: 'flex', gap: 12, flexShrink: 0, marginLeft: isMobile ? 24 : 16 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span style={{ display: 'inline-block', width: 18, height: 18, borderRadius: 9, border: '2px solid #c0c0c0' }} />
+                        <span style={{ display: 'inline-block', width: isMobile ? 20 : 18, height: isMobile ? 20 : 18, borderRadius: 10, border: '2px solid #c0c0c0' }} />
                         <span style={{ color: '#8888a0', fontSize: 13 }}>T</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span style={{ display: 'inline-block', width: 18, height: 18, borderRadius: 9, border: '2px solid #c0c0c0' }} />
+                        <span style={{ display: 'inline-block', width: isMobile ? 20 : 18, height: isMobile ? 20 : 18, borderRadius: 10, border: '2px solid #c0c0c0' }} />
                         <span style={{ color: '#8888a0', fontSize: 13 }}>F</span>
                       </div>
                     </div>
@@ -547,8 +853,8 @@ function QuizPage({ onNext, onBack }) {
                 );
               })}
             </div>
-            <div style={{ marginTop: 48, paddingTop: 24, borderTop: '2px solid #1a1a2e' }}>
-              <p style={{ color: '#8888a0', fontSize: 13, margin: 0 }}>Total: ......... / {MC_QUESTIONS.length + TF_QUESTIONS.length}</p>
+            <div style={{ marginTop: isMobile ? 32 : 48, paddingTop: isMobile ? 16 : 24, borderTop: '2px solid #1a1a2e' }}>
+              <p style={{ color: '#8888a0', fontSize: isMobile ? 12 : 13, margin: 0 }}>Total: ......... / {MC_QUESTIONS.length + TF_QUESTIONS.length}</p>
             </div>
           </div>
         </div>
@@ -565,28 +871,44 @@ function QuizPage({ onNext, onBack }) {
 // ============================================
 
 function AnswersPage({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
+  const headingSize = isMobile ? 28 : isTablet ? 34 : 40;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding: '32px 64px 100px', overflowY: 'auto' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', padding, overflowY: 'auto' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-        <div style={{ textAlign: 'center', marginBottom: 36, paddingBottom: 24, borderBottom: '2px solid #1a1a2e' }}>
-          <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, color: '#1a1a2e' }}>Answers</h2>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 24 : 36, paddingBottom: isMobile ? 16 : 24, borderBottom: '2px solid #1a1a2e' }}>
+          <p style={{ color: '#8888a0', fontSize: isMobile ? 10 : 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e' }}>Answers</h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+          gap: isMobile ? 32 : 48 
+        }}>
           <div>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: '#1a1a2e', marginBottom: 24 }}>Part 1</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 16 : 18, color: '#1a1a2e', marginBottom: isMobile ? 16 : 24 }}>Part 1</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 16 }}>
               {MC_QUESTIONS.map((q, qi) => {
                 const word = ALL_VOCAB.find(v => v.swedish === q.word);
                 const c = word ? COLORS[word.type] : COLORS.other;
                 return (
-                  <div key={qi} style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
-                    <span style={{ color: '#8888a0', fontSize: 14, minWidth: 24 }}>{qi + 1}.</span>
-                    <span style={{ fontFamily: 'Georgia, serif', fontSize: 20, color: c.text, fontWeight: 600 }}>{q.word}</span>
-                    <span style={{ color: '#5c5c7a', fontSize: 16 }}>=</span>
-                    <span style={{ color: '#1a1a2e', fontSize: 16, fontWeight: 600 }}>{q.options[q.correct]}</span>
+                  <div key={qi} style={{ 
+                    display: 'flex', 
+                    alignItems: 'baseline', 
+                    gap: isMobile ? 8 : 12, 
+                    padding: isMobile ? '10px 0' : '12px 0', 
+                    borderBottom: '1px solid #f0f0f0',
+                    flexWrap: 'wrap',
+                  }}>
+                    <span style={{ color: '#8888a0', fontSize: isMobile ? 13 : 14, minWidth: 24 }}>{qi + 1}.</span>
+                    <span style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 18 : 20, color: c.text, fontWeight: 600 }}>{q.word}</span>
+                    <span style={{ color: '#5c5c7a', fontSize: isMobile ? 14 : 16 }}>=</span>
+                    <span style={{ color: '#1a1a2e', fontSize: isMobile ? 14 : 16, fontWeight: 600 }}>{q.options[q.correct]}</span>
                   </div>
                 );
               })}
@@ -594,19 +916,32 @@ function AnswersPage({ onNext, onBack }) {
           </div>
 
           <div>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: '#1a1a2e', marginBottom: 24 }}>Part 2</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 16 : 18, color: '#1a1a2e', marginBottom: isMobile ? 16 : 24 }}>Part 2</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 16 }}>
               {TF_QUESTIONS.map((q, qi) => {
                 const word = ALL_VOCAB.find(v => v.swedish === q.word);
                 const c = word ? COLORS[word.type] : COLORS.other;
                 return (
-                  <div key={qi} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                      <span style={{ color: '#8888a0', fontSize: 14 }}>{MC_QUESTIONS.length + qi + 1}.</span>
-                      <span style={{ fontFamily: 'Georgia, serif', color: c.text, fontWeight: 600 }}>{q.word}</span>
-                      <span style={{ color: '#5c5c7a', fontSize: 15 }}>{q.statement.replace(`'${q.word}' `, '')}</span>
+                  <div key={qi} style={{ 
+                    display: 'flex', 
+                    alignItems: isMobile ? 'flex-start' : 'baseline', 
+                    justifyContent: 'space-between', 
+                    padding: isMobile ? '10px 0' : '12px 0', 
+                    borderBottom: '1px solid #f0f0f0',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: isMobile ? 6 : 0,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+                      <span style={{ color: '#8888a0', fontSize: isMobile ? 13 : 14 }}>{MC_QUESTIONS.length + qi + 1}.</span>
+                      <span style={{ fontFamily: 'Georgia, serif', color: c.text, fontWeight: 600, fontSize: isMobile ? 16 : 18 }}>{q.word}</span>
+                      <span style={{ color: '#5c5c7a', fontSize: isMobile ? 13 : 15 }}>{q.statement.replace(`'${q.word}' `, '')}</span>
                     </div>
-                    <span style={{ fontWeight: 700, fontSize: 18, color: q.correct ? '#2d7b3a' : '#b03030', marginLeft: 16 }}>
+                    <span style={{ 
+                      fontWeight: 700, 
+                      fontSize: isMobile ? 16 : 18, 
+                      color: q.correct ? '#2d7b3a' : '#b03030', 
+                      marginLeft: isMobile ? 24 : 16 
+                    }}>
                       {q.correct ? 'TRUE' : 'FALSE'}
                     </span>
                   </div>
@@ -628,13 +963,25 @@ function AnswersPage({ onNext, onBack }) {
 // ============================================
 
 function EndSlide({ onRestart, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '32px 20px 120px' : isTablet ? '40px 40px 100px' : '48px 64px 100px';
+  const headingSize = isMobile ? 32 : isTablet ? 40 : 48;
+  
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding: '48px 64px 100px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 8 }}>THE FULL SONG</p>
-        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 48, color: '#1a1a2e', marginBottom: 32, lineHeight: 1.1 }}>Carolus Rex</h2>
+        <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: 8 }}>THE FULL SONG</p>
+        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 20 : 32, lineHeight: 1.1 }}>Carolus Rex</h2>
 
-        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, borderRadius: 8, overflow: 'hidden', marginBottom: 40 }}>
+        <div style={{ 
+          position: 'relative', 
+          paddingBottom: '56.25%', 
+          height: 0, 
+          borderRadius: 8, 
+          overflow: 'hidden', 
+          marginBottom: isMobile ? 28 : 40 
+        }}>
           <iframe
             src="https://www.youtube.com/embed/HIuWMI0zpiU"
             title="Sabaton - Carolus Rex"
@@ -644,26 +991,75 @@ function EndSlide({ onRestart, onBack }) {
           />
         </div>
 
-        <p style={{ color: '#8888a0', fontSize: 14, marginBottom: 24 }}>What we covered</p>
+        <p style={{ color: '#8888a0', fontSize: isMobile ? 13 : 14, marginBottom: isMobile ? 16 : 24 }}>What we covered</p>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 40 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: isMobile ? 8 : 10, marginBottom: isMobile ? 28 : 40 }}>
           {ALL_VOCAB.map((word, i) => {
             const c = COLORS[word.type];
             return (
-              <div key={i} style={{ backgroundColor: '#fff', borderRadius: 8, padding: '10px 16px', display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: c.text }}>{word.swedish}</span>
-                <span style={{ color: '#8888a0', fontSize: 13 }}>{word.meaning}</span>
+              <div key={i} style={{ 
+                backgroundColor: '#fff', 
+                borderRadius: 8, 
+                padding: isMobile ? '8px 12px' : '10px 16px', 
+                display: 'flex', 
+                alignItems: 'baseline', 
+                gap: isMobile ? 6 : 8 
+              }}>
+                <span style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 15 : 18, color: c.text }}>{word.swedish}</span>
+                <span style={{ color: '#8888a0', fontSize: isMobile ? 11 : 13 }}>{word.meaning}</span>
               </div>
             );
           })}
         </div>
 
-        <p style={{ color: '#7c6a9c', fontFamily: 'Georgia, serif', fontSize: 20, fontStyle: 'italic' }}>Gång på gång, sjung Carolus sång</p>
+        <p style={{ color: '#7c6a9c', fontFamily: 'Georgia, serif', fontSize: isMobile ? 17 : 20, fontStyle: 'italic' }}>
+          Gång på gång, sjung Carolus sång
+        </p>
       </div>
       <Dots current={9} total={10} />
-      <div style={{ position: 'fixed', bottom: 32, left: 32, right: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 50 }}>
-        <div>{onBack && <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8888a0', fontSize: 14, letterSpacing: '0.05em' }}>← Back</button>}</div>
-        <div><button onClick={onRestart} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1a1a2e', fontSize: 14, letterSpacing: '0.05em' }}>Start again →</button></div>
+      <div style={{ 
+        position: 'fixed', 
+        bottom: isMobile ? 16 : 32, 
+        left: isMobile ? 16 : 32, 
+        right: isMobile ? 16 : 32, 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        zIndex: 50,
+        padding: isMobile ? '12px 16px' : 0,
+        backgroundColor: isMobile ? 'rgba(232, 235, 244, 0.95)' : 'transparent',
+        borderRadius: isMobile ? 12 : 0,
+        backdropFilter: isMobile ? 'blur(10px)' : 'none',
+      }}>
+        <div>
+          {onBack && (
+            <button onClick={onBack} style={{ 
+              background: 'none', 
+              border: 'none', 
+              cursor: 'pointer', 
+              color: '#8888a0', 
+              fontSize: isMobile ? 15 : 14, 
+              letterSpacing: '0.05em',
+              padding: isMobile ? '8px 0' : 0,
+            }}>
+              ← Back
+            </button>
+          )}
+        </div>
+        <div>
+          <button onClick={onRestart} style={{ 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            color: '#1a1a2e', 
+            fontSize: isMobile ? 15 : 14, 
+            letterSpacing: '0.05em',
+            padding: isMobile ? '8px 0' : 0,
+            fontWeight: isMobile ? 600 : 400,
+          }}>
+            Start again →
+          </button>
+        </div>
       </div>
     </div>
   );
