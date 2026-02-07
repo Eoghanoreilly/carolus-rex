@@ -383,7 +383,7 @@ function StorySlide1({ onNext, onBack }) {
           }} 
         />
       </div>
-      <Dots current={1} total={10} />
+      <Dots current={2} total={11} />
       <Nav onNext={onNext} onBack={onBack} />
     </div>
   );
@@ -442,7 +442,7 @@ function StorySlide2({ onNext, onBack }) {
           </p>
         </div>
       </div>
-      <Dots current={2} total={10} />
+      <Dots current={3} total={11} />
       <Nav onNext={onNext} onBack={onBack} />
     </div>
   );
@@ -512,8 +512,54 @@ function StorySlide3({ onNext, onBack }) {
           </div>
         </div>
       </div>
-      <Dots current={3} total={10} />
-      <Nav onNext={onNext} onBack={onBack} nextLabel="Learn the music" />
+      <Dots current={4} total={11} />
+      <Nav onNext={onNext} onBack={onBack} nextLabel="Learn the words" />
+    </div>
+  );
+}
+
+// ============================================
+// BAND PAGE
+// ============================================
+
+function BandPage({ onNext, onBack }) {
+  const { isMobile, isTablet } = useWindowSize();
+  
+  const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
+  const headingSize = isMobile ? 32 : isTablet ? 40 : 48;
+  
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>THE BAND</p>
+        
+        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', margin: 0, lineHeight: 1.1, marginBottom: isMobile ? 20 : 32 }}>Meet Sabaton</h2>
+
+        <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, marginBottom: isMobile ? 24 : 32 }}>
+          Born in 1999 in the sleepy town of Falun, Sabaton has been turning the history you fell asleep reading into power metal anthems. From the Siege of Vienna to the last stand of the Swiss Guard—the boring history you never bothered to read? They made it loud.
+        </p>
+
+        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, borderRadius: 8, overflow: 'hidden', marginBottom: isMobile ? 24 : 32 }}>
+          <iframe
+            src="https://www.youtube.com/embed/Us2ylGAwBnk"
+            title="Sabaton - Carolus Rex"
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+
+        <div style={{ backgroundColor: '#fff', borderRadius: 8, padding: isMobile ? 20 : 24 }}>
+          <p style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 18 : 22, color: '#7c6a9c', fontStyle: 'italic', margin: '0 0 8px' }}>
+            Carolus Rex
+          </p>
+          <p style={{ color: '#5c5c7a', fontSize: isMobile ? 14 : 15, margin: 0 }}>
+            The title track, sung in Swedish. Karl XII crowns himself, answering to no one but God.
+          </p>
+        </div>
+      </div>
+      <Dots current={1} total={11} />
+      <Nav onNext={onNext} onBack={onBack} nextLabel="The story" />
     </div>
   );
 }
@@ -565,7 +611,7 @@ function VocabPage({ onNext, onBack }) {
           <VocabColumn words={VOCAB_P2} label="PART 2 - THE CHORUS" isMobile={isMobile} />
         </div>
       </div>
-      <Dots current={4} total={10} />
+      <Dots current={5} total={11} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Hear the song" />
     </div>
   );
@@ -691,7 +737,7 @@ function LyricsPage1({ onNext, onBack }) {
           <VocabKey words={VOCAB_P1} isMobile={isMobile} />
         )}
       </div>
-      <Dots current={5} total={10} />
+      <Dots current={6} total={11} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Part 2" />
     </div>
   );
@@ -753,7 +799,7 @@ function LyricsPage2({ onNext, onBack }) {
           <VocabKey words={VOCAB_P2} isMobile={isMobile} />
         )}
       </div>
-      <Dots current={6} total={10} />
+      <Dots current={7} total={11} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Quick check" />
     </div>
   );
@@ -859,7 +905,7 @@ function QuizPage({ onNext, onBack }) {
         </div>
 
       </div>
-      <Dots current={7} total={10} />
+      <Dots current={8} total={11} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Answers" />
     </div>
   );
@@ -951,7 +997,7 @@ function AnswersPage({ onNext, onBack }) {
         </div>
 
       </div>
-      <Dots current={8} total={10} />
+      <Dots current={9} total={11} />
       <Nav onNext={onNext} onBack={onBack} nextLabel="Finish" />
     </div>
   );
@@ -1015,7 +1061,7 @@ function EndSlide({ onRestart, onBack }) {
           Gång på gång, sjung Carolus sång
         </p>
       </div>
-      <Dots current={9} total={10} />
+      <Dots current={10} total={11} />
       <div style={{ 
         position: 'fixed', 
         bottom: isMobile ? 16 : 32, 
@@ -1076,15 +1122,16 @@ export default function App() {
 
   const slides = [
     <TitleSlide key={0} onNext={next} />,
-    <StorySlide1 key={1} onNext={next} onBack={back} />,
-    <StorySlide2 key={2} onNext={next} onBack={back} />,
-    <StorySlide3 key={3} onNext={next} onBack={back} />,
-    <VocabPage key={4} onNext={next} onBack={back} />,
-    <LyricsPage1 key={5} onNext={next} onBack={back} />,
-    <LyricsPage2 key={6} onNext={next} onBack={back} />,
-    <QuizPage key={7} onNext={next} onBack={back} />,
-    <AnswersPage key={8} onNext={next} onBack={back} />,
-    <EndSlide key={9} onRestart={restart} onBack={back} />,
+    <BandPage key={1} onNext={next} onBack={back} />,
+    <StorySlide1 key={2} onNext={next} onBack={back} />,
+    <StorySlide2 key={3} onNext={next} onBack={back} />,
+    <StorySlide3 key={4} onNext={next} onBack={back} />,
+    <VocabPage key={5} onNext={next} onBack={back} />,
+    <LyricsPage1 key={6} onNext={next} onBack={back} />,
+    <LyricsPage2 key={7} onNext={next} onBack={back} />,
+    <QuizPage key={8} onNext={next} onBack={back} />,
+    <AnswersPage key={9} onNext={next} onBack={back} />,
+    <EndSlide key={10} onRestart={restart} onBack={back} />,
   ];
 
   return <div>{slides[slide]}</div>;
