@@ -775,8 +775,7 @@ function QuizPage({ onNext, onBack }) {
 
         <div style={{ textAlign: 'center', marginBottom: isMobile ? 24 : 36, paddingBottom: isMobile ? 16 : 24, borderBottom: '2px solid #1a1a2e' }}>
           <p style={{ color: '#8888a0', fontSize: isMobile ? 10 : 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: isMobile ? 8 : 12 }}>Quick check</h2>
-          <p style={{ color: '#8888a0', fontSize: isMobile ? 12 : 14, margin: 0 }}>Name: ..........................</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', marginBottom: 0 }}>Quick check</h2>
         </div>
 
         <div style={{ 
