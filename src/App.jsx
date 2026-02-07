@@ -555,9 +555,15 @@ function BandPage({ onNext, onBack }) {
           gap: isMobile ? 24 : 32, 
           marginBottom: isMobile ? 24 : 32 
         }}>
-          <div>
+        <div>
+            <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, margin: '0 0 16px' }}>
+              Sabaton came out of Falun, Sweden in 1999 and decided that songs about satan and the darkness of night were overdone in metal. So they made music about Wars.
+            </p>
+            <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, margin: '0 0 16px' }}>
+              The majority of their songs are about battles, kings and sieges.
+            </p>
             <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, margin: 0 }}>
-              Born in 1999 in the sleepy town of Falun, Sabaton has been turning the history you fell asleep reading into power metal anthems. From the Siege of Vienna to the last stand of the Swiss Guard—the boring history you never bothered to read? They made it loud.
+              That's basically the band. Heavy music for heavy history.
             </p>
           </div>
           <div style={{ position: 'relative', paddingBottom: isMobile ? '56.25%' : '56.25%', height: 0, borderRadius: 8, overflow: 'hidden' }}>
