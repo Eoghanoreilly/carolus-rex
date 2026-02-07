@@ -531,7 +531,7 @@ function BandPage({ onNext, onBack }) {
   
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>THE BAND</p>
         
         <img 
@@ -549,18 +549,26 @@ function BandPage({ onNext, onBack }) {
 
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', margin: 0, lineHeight: 1.1, marginBottom: isMobile ? 20 : 32 }}>Meet Sabaton</h2>
 
-        <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, marginBottom: isMobile ? 24 : 32 }}>
-          Born in 1999 in the sleepy town of Falun, Sabaton has been turning the history you fell asleep reading into power metal anthems. From the Siege of Vienna to the last stand of the Swiss Guard—the boring history you never bothered to read? They made it loud.
-        </p>
-
-        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, borderRadius: 8, overflow: 'hidden', marginBottom: isMobile ? 24 : 32 }}>
-          <iframe
-            src="https://www.youtube.com/embed/Us2ylGAwBnk"
-            title="Sabaton - Carolus Rex"
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+          gap: isMobile ? 24 : 32, 
+          marginBottom: isMobile ? 24 : 32 
+        }}>
+          <div>
+            <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, margin: 0 }}>
+              Born in 1999 in the sleepy town of Falun, Sabaton has been turning the history you fell asleep reading into power metal anthems. From the Siege of Vienna to the last stand of the Swiss Guard—the boring history you never bothered to read? They made it loud.
+            </p>
+          </div>
+          <div style={{ position: 'relative', paddingBottom: isMobile ? '56.25%' : '56.25%', height: 0, borderRadius: 8, overflow: 'hidden' }}>
+            <iframe
+              src="https://www.youtube.com/embed/HIuWMI0zpiU"
+              title="Sabaton - Carolus Rex"
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         </div>
 
         <div style={{ backgroundColor: '#fff', borderRadius: 8, padding: isMobile ? 20 : 24 }}>
