@@ -490,7 +490,6 @@ function QuizPage({ onNext, onBack }) {
         <div style={{ textAlign: 'center', marginBottom: 36, paddingBottom: 24, borderBottom: '2px solid #1a1a2e' }}>
           <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.2em', marginBottom: 8 }}>CAROLUS REX</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, color: '#1a1a2e', marginBottom: 12 }}>Quick check</h2>
-          <p style={{ color: '#8888a0', fontSize: 14, margin: 0 }}>Name: ..........................</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
