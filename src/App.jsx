@@ -527,12 +527,26 @@ function BandPage({ onNext, onBack }) {
   
   const padding = isMobile ? '24px 20px 120px' : isTablet ? '32px 40px 100px' : '32px 64px 100px';
   const headingSize = isMobile ? 32 : isTablet ? 40 : 48;
+  const imageHeight = isMobile ? 200 : isTablet ? 240 : 280;
   
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', padding }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <p style={{ color: '#8888a0', fontSize: isMobile ? 11 : 12, letterSpacing: '0.15em', marginBottom: isMobile ? 16 : 24 }}>THE BAND</p>
         
+        <img 
+          src="/images/sabaton.jpg" 
+          alt="Sabaton" 
+          style={{ 
+            width: '100%', 
+            height: imageHeight, 
+            objectFit: 'cover', 
+            objectPosition: 'center 30%', 
+            borderRadius: 4, 
+            marginBottom: isMobile ? 24 : 32 
+          }} 
+        />
+
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: headingSize, color: '#1a1a2e', margin: 0, lineHeight: 1.1, marginBottom: isMobile ? 20 : 32 }}>Meet Sabaton</h2>
 
         <p style={{ color: '#5c5c7a', fontSize: isMobile ? 16 : 18, lineHeight: 1.8, marginBottom: isMobile ? 24 : 32 }}>
