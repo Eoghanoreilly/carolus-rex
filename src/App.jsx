@@ -339,7 +339,7 @@ function FirstListen({ onNext, onBack }) {
                 return <span key={i} style={{ backgroundColor: c.bg, color: c.text, padding: '6px 14px', borderRadius: 16, fontSize: 14, fontFamily: 'Georgia, serif' }}>{word.swedish}</span>;
               })}
             </div>
-            <PlayButton src="/audio/verse.mp3" label="Play verse" />
+            <PlayButton src="/audio/verse.mp3" label="Verse" />
           </div>
 
           <div style={{ backgroundColor: '#ffffff', borderRadius: 8, padding: 32 }}>
@@ -350,7 +350,7 @@ function FirstListen({ onNext, onBack }) {
                 return <span key={i} style={{ backgroundColor: c.bg, color: c.text, padding: '6px 14px', borderRadius: 16, fontSize: 14, fontFamily: 'Georgia, serif' }}>{word.swedish}</span>;
               })}
             </div>
-            <PlayButton src="/audio/chorus.mp3" label="Play chorus" />
+            <PlayButton src="/audio/chorus.mp3" label="Chorus" />
           </div>
         </div>
       </div>
@@ -437,7 +437,7 @@ function LyricsPage1({ onNext, onBack }) {
         <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
           <div style={{ backgroundColor: '#1a1a2e', padding: 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
             <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 1</p>
-            <PlayButtonWhite src="/audio/verse.mp3" label="Play verse" />
+            <PlayButtonWhite src="/audio/verse.mp3" label="Verse" />
           </div>
           <VocabKey words={VOCAB_P1} />
         </div>
@@ -467,7 +467,7 @@ function LyricsPage2({ onNext, onBack }) {
         <div style={{ position: 'sticky', top: 48, alignSelf: 'start' }}>
           <div style={{ backgroundColor: '#1a1a2e', padding: 32, borderRadius: 8, textAlign: 'center', marginBottom: 24 }}>
             <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 16 }}>LISTEN TO PART 2</p>
-            <PlayButtonWhite src="/audio/chorus.mp3" label="Play chorus" />
+            <PlayButtonWhite src="/audio/chorus.mp3" label="Chorus" />
           </div>
           <VocabKey words={VOCAB_P2} />
         </div>
