@@ -180,7 +180,7 @@ function TitleSlide({ onNext }) {
     <div style={{ minHeight: '100vh', backgroundColor: '#E8EBF4', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
       <div style={{ maxWidth: 800, width: '100%' }}>
         <p style={{ color: '#8888a0', fontSize: 11, letterSpacing: '0.2em', marginBottom: 24 }}>SWEDISH THROUGH METAL</p>
-        <img src="/images/cathedral.jpg" alt="Stockholm Cathedral, 1697" style={{ width: '100%', height: 360, objectFit: 'cover', objectPosition: 'top', borderRadius: 4 }} />
+        <img src="/images/cathedral.jpg" alt="Stockholm Cathedral, 1697" style={{ width: '100%', height: 360, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
         <div style={{ marginTop: 48, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
             <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 56, color: '#1a1a2e', margin: 0, lineHeight: 1.1 }}>Carolus Rex</h1>
@@ -209,7 +209,7 @@ function StorySlide1({ onNext, onBack }) {
           <p style={{ color: '#1a1a2e', fontSize: 22, lineHeight: 1.7, marginBottom: 24, fontWeight: 700 }}>He was fifteen.</p>
           <p style={{ color: '#5c5c7a', lineHeight: 1.7 }}>They would come to call him "The Last Viking." "The Swedish Meteor."</p>
         </div>
-        <img src="/images/karl-xii.jpg" alt="Karl XII" style={{ width: '100%', height: 420, objectFit: 'cover', objectPosition: 'top', borderRadius: 4 }} />
+        <img src="/images/karl-xii.jpg" alt="Karl XII" style={{ width: '100%', height: 520, objectFit: 'cover', objectPosition: 'center 70%', borderRadius: 4 }} />
       </div>
       <Dots current={1} total={10} />
       <Nav onNext={onNext} onBack={onBack} />
@@ -221,7 +221,7 @@ function StorySlide2({ onNext, onBack }) {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#F0EDE8', padding: '32px 64px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '80vh' }}>
-        <img src="/images/coronation.jpg" alt="The coronation" style={{ width: '100%', height: 420, objectFit: 'cover', objectPosition: 'top', borderRadius: 4 }} />
+        <img src="/images/coronation.jpg" alt="The coronation" style={{ width: '100%', height: 420, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
         <div>
           <p style={{ color: '#8888a0', fontSize: 12, letterSpacing: '0.15em', marginBottom: 24 }}>II. THE CROWN</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 44, color: '#7c6a9c', marginBottom: 8, lineHeight: 1.1, fontStyle: 'italic' }}>Kronan kommer ej från kyrkan</h2>
@@ -257,7 +257,7 @@ function StorySlide3({ onNext, onBack }) {
           <p style={{ color: '#1a1a2e', fontSize: 20, fontWeight: 700 }}>And so ended the reign of the Last Viking.</p>
         </div>
         <div>
-          <img src="/images/cederstrom.jpg" alt="Bringing Home the Body of King Karl XII" style={{ width: '100%', height: 400, objectFit: 'cover', objectPosition: 'top', borderRadius: 4 }} />
+          <img src="/images/cederstrom.jpg" alt="Bringing Home the Body of King Karl XII" style={{ width: '100%', height: 400, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: 4 }} />
           <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 24 }}>
             {[{ n: "15", l: "crowned" }, { n: "18", l: "years at war" }, { n: "36", l: "died" }].map((d, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
