@@ -497,13 +497,13 @@ function QuizPage({ onNext, onBack }) {
           <div>
             <p style={{ fontFamily: 'Georgia, serif', fontSize: 18, color: '#1a1a2e', marginBottom: 4 }}>Part 1</p>
             <p style={{ color: '#8888a0', fontSize: 13, marginBottom: 24 }}>Fill in the circle next to the correct answer.</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {MC_QUESTIONS.map((q, qi) => {
                 const word = ALL_VOCAB.find(v => v.swedish === q.word);
                 const c = word ? COLORS[word.type] : COLORS.other;
                 return (
-                  <div key={qi} style={{ paddingBottom: 16, borderBottom: '1px solid #f0f0f0' }}>
-                    <p style={{ margin: '0 0 10px' }}>
+                  <div key={qi} style={{ paddingBottom: 8, borderBottom: '1px solid #f0f0f0' }}>
+                    <p style={{ margin: '0 0 4px' }}>
                       <span style={{ fontFamily: 'Georgia, serif', fontSize: 20, color: c.text, fontWeight: 600 }}>{qi + 1}. {q.word}</span>
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 24px', paddingLeft: 20 }}>
